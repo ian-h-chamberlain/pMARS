@@ -1,0 +1,3 @@
+src/pmars
+src/*.o
+src/core
