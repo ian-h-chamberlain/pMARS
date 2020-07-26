@@ -1,0 +1,5 @@
+src/pmars
+src/*.o
+src/core
+doc/*.doc
+doc/*.man

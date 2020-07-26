@@ -1,12 +1,13 @@
 # generic UNIX makefile
-CC = gcc			# req. for linux
+#CC = gcc				# req. for linux
+CC = gcc-10 			# GCC installed by `brew install gcc` on macOS
 #CC = cc				# if you don't have gcc
 # Configuration options:
 #
 # No.   Name            Incompatible with   Description
-# (1)   -DSERVER        2                   disables cdb debugger (koth server 
+# (1)   -DSERVER        2                   disables cdb debugger (koth server
 #                                           version)
-# (2)   -DGRAPHX        1                   enables platform specific core 
+# (2)   -DGRAPHX        1                   enables platform specific core
 #                                           graphics
 # (3)   -DKEYPRESS                          only for curses display on SysV:
 #                                           enter cdb upon keypress (use if
@@ -15,19 +16,20 @@ CC = gcc			# req. for linux
 # (5)   -DSMALLMEM                          16-bit addresses, less memory
 # (6)   -DXWINGRAPHX    1                   X-Windows graphics (UNIX)
 # (7)   -DPERMUTATE                         enables -P switch
+# (8)   -Dunix                         		Req. for building on UNIX platforms
 
-CFLAGS = -O -DEXT94 -DXWINGRAPHX -DPERMUTATE
+CFLAGS = -O -DEXT94 -DXWINGRAPHX -DPERMUTATE -Dunix -I/opt/X11/include
 LFLAGS = -x
 # LIB = -lcurses -ltermlib		# enable this one for curses display
 # LIB = -lvgagl -lvga			# enable this one for Linux/SVGA
-LIB = -L/usr/X11R6/lib -lX11		# enable this one for X11
+LIB = -L/opt/X11/lib -lX11		# enable this one for X11 (may need to change lib path)
 
 .SUFFIXES: .o .c .c~ .man .doc .6
 MAINFILE = pmars
 
-HEADER = global.h config.h asm.h sim.h 
+HEADER = global.h config.h asm.h sim.h
 OBJ1 = pmars.o asm.o eval.o disasm.o cdb.o sim.o pos.o
-OBJ2 = clparse.o global.o token.o 
+OBJ2 = clparse.o global.o token.o
 OBJ3 = str_eng.o
 
 all: flags $(MAINFILE)
@@ -54,7 +56,7 @@ lnxdisp.c: lnxdisp.h
 $(OBJ1) $(OBJ2) $(OBJ3): Makefile config.h global.h
 
 .c.o:
-	@echo Compiling $*.o 
+	@echo Compiling $*.o
 	@$(CC) $(CFLAGS) -c $*.c
 
 
